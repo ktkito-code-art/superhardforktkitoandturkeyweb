@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل البيانات</title>
+    <link rel="stylesheet" href="css/edit-data.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <a href="webowner.html" class="back-btn">
+            <i class="fas fa-arrow-right"></i>
+            عودة
+        </a>
+
+        <!-- Header -->
+        <header>
+            <h1>مستكشف الملفات</h1>
+            <div id="currentPath">
+                <i class="fas fa-folder-open"></i>
+                <span>الرئيسية</span>
+            </div>
+        </header>
+
+        <!-- File Explorer -->
+        <div id="filesContainer" class="files-grid"></div>
+
+        <!-- Editor Modal -->
+        <div id="editorContainer">
+            <div class="glass-effect"></div>
+            <div id="editorHeader">
+                <div id="currentFileName"></div>
+                <div class="editor-buttons">
+                    <button id="saveBtn" class="editor-btn">
+                        <i class="fas fa-save"></i>
+                        حفظ
+                    </button>
+                    <button id="closeEditorBtn" class="editor-btn">
+                        <i class="fas fa-times"></i>
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+            <textarea id="jsonEditor" spellcheck="false" dir="ltr"></textarea>
+        </div>
+    </div>
+
+    <script src="js/edit-data.js"></script>
+</body>
+</html> 

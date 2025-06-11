@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Art - تحليل البيانات</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/analyze.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Code Art</span>
+            </div>
+            <div class="nav-content">
+                <!-- Back Button -->
+                <a href="dashboard.html" class="back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    عودة
+                </a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span id="userEmail"></span>
+                </div>
+                <div class="lang-switch" id="langSwitch" onclick="toggleLanguage()">
+                    <i class="fas fa-globe"></i>
+                    <span class="current-lang" dir="auto">AR</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="analyze-container">
+            <div class="analyze-header">
+                <h1>تحليل البيانات</h1>
+                <p>تحليل وعرض البيانات بشكل مرئي</p>
+            </div>
+
+            <div class="analyze-grid">
+                <div class="analyze-card" onclick="openAnalysisModal()">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>تحليل الأشهر</h3>
+                    <p>تحليل البيانات حسب الأشهر المختارة</p>
+                </div>
+
+                <div class="analyze-card" onclick="openTopPerformersModal()">
+                    <div class="card-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>أفضل الأداء</h3>
+                    <p>عرض أفضل المضيفين أداءً</p>
+                </div>
+            </div>
+
+            <!-- Analysis Results Section -->
+            <div id="analysisResults" class="analysis-results" style="display: none;">
+                <div class="results-header">
+                    <h2>نتائج التحليل</h2>
+                    <div class="selected-period"></div>
+                </div>
+                
+                <!-- Totals Section -->
+                <div class="totals-section">
+                    <div class="stat-card total">
+                        <i class="fas fa-gem"></i>
+                        <h4>إجمالي الجواهر</h4>
+                        <span id="totalGems">0</span>
+                    </div>
+                    <div class="stat-card total">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h4>إجمالي الرواتب</h4>
+                        <span id="totalSalaries">0</span>
+                    </div>
+                    <div class="stat-card total">
+                        <i class="fas fa-users"></i>
+                        <h4>إجمالي المضيفين</h4>
+                        <span id="totalHosts">0</span>
+                    </div>
+                </div>
+
+                <!-- Monthly Details Grid -->
+                <div class="monthly-details-grid" id="monthlyDetailsGrid">
+                    <!-- Monthly cards will be added here dynamically -->
+                </div>
+
+                <!-- Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-header">
+                        <h3>الرسم البياني التفاعلي</h3>
+                        <p>يمكنك تحريك المؤشر فوق الأعمدة لعرض التفاصيل</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="analysisChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Modal -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>اختيار فترة التحليل</h2>
+                <button class="close-btn" onclick="closeAnalysisModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>السنة</label>
+                    <div id="yearsContainer" class="months-grid">
+                        <!-- Years will be loaded here -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>الأشهر (اختر من 2 إلى 12 شهر)</label>
+                    <div id="monthsContainer" class="months-grid">
+                        <!-- Months will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="performAnalysis()" class="analyze-btn">
+                        <i class="fas fa-chart-bar"></i>
+                        تحليل البيانات
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Performers Modal -->
+    <div id="topPerformersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>أفضل المضيفين أداءً</h2>
+                <button class="close-btn" onclick="closeTopPerformersModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>السنة</label>
+                    <div id="topYearsContainer" class="months-grid">
+                        <!-- Years will be loaded here -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>الأشهر (اختر من 2 إلى 12 شهر)</label>
+                    <div id="topMonthsContainer" class="months-grid">
+                        <!-- Months will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="findTopPerformers()" class="analyze-btn">
+                        <i class="fas fa-search"></i>
+                        بحث
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Performers Results -->
+    <div id="topPerformersResults" class="top-performers-results" style="display: none;">
+        <div class="results-header">
+            <h2>أفضل المضيفين</h2>
+            <div class="selected-period"></div>
+        </div>
+        <div class="performers-grid">
+            <div class="performers-section">
+                <h3>الأعلى في الجواهر</h3>
+                <div id="topGemsPerformers" class="performers-list"></div>
+            </div>
+            <div class="performers-section">
+                <h3>الأعلى في الرواتب</h3>
+                <div id="topSalaryPerformers" class="performers-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/analyze.js"></script>
+</body>
+</html> 

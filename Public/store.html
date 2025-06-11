@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-ar="Code Art - إدارة المضيفين" data-en="Code Art - Host Management">Code Art - إدارة المضيفين</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/store.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Code Art</span>
+            </div>
+            <div class="nav-content">
+                <!-- Back Button -->
+                <a href="dashboard.html" class="back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    عودة
+                </a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span id="userEmail"></span>
+                </div>
+                <div class="lang-switch" id="langSwitch" onclick="toggleLanguage()">
+                    <i class="fas fa-globe"></i>
+                    <span class="current-lang" dir="auto">AR</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="store-container">
+            <div class="store-header">
+                <h1 data-ar="إدارة المضيفين" data-en="Host Management">إدارة المضيفين</h1>
+                <div class="header-actions">
+                    <button id="addHostBtn" class="action-btn">
+                        <i class="fas fa-plus"></i>
+                        <span data-ar="إضافة مضيف جديد" data-en="Add New Host">إضافة مضيف جديد</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <input type="text" id="searchInput" data-ar-placeholder="بحث بالرقم أو الاسم..." data-en-placeholder="Search by number or name..." placeholder="بحث بالرقم أو الاسم..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <div class="filter-group">
+                        <select id="countryFilter" class="filter-select">
+                            <option value="" data-ar="كل الدول" data-en="All Countries">كل الدول</option>
+                            <option value="SA" data-ar="السعودية" data-en="Saudi Arabia">السعودية</option>
+                            <option value="AE" data-ar="الإمارات" data-en="UAE">الإمارات</option>
+                            <option value="QA" data-ar="قطر" data-en="Qatar">قطر</option>
+                            <option value="KW" data-ar="الكويت" data-en="Kuwait">الكويت</option>
+                            <option value="BH" data-ar="البحرين" data-en="Bahrain">البحرين</option>
+                            <option value="OM" data-ar="عمان" data-en="Oman">عمان</option>
+                            <option value="EG" data-ar="مصر" data-en="Egypt">مصر</option>
+                            <option value="IQ" data-ar="العراق" data-en="Iraq">العراق</option>
+                            <option value="SY" data-ar="سوريا" data-en="Syria">سوريا</option>
+                            <option value="LB" data-ar="لبنان" data-en="Lebanon">لبنان</option>
+                            <option value="JO" data-ar="الأردن" data-en="Jordan">الأردن</option>
+                            <option value="PS" data-ar="فلسطين" data-en="Palestine">فلسطين</option>
+                            <option value="YE" data-ar="اليمن" data-en="Yemen">اليمن</option>
+                            <option value="SD" data-ar="السودان" data-en="Sudan">السودان</option>
+                            <option value="LY" data-ar="ليبيا" data-en="Libya">ليبيا</option>
+                            <option value="TN" data-ar="تونس" data-en="Tunisia">تونس</option>
+                            <option value="DZ" data-ar="الجزائر" data-en="Algeria">الجزائر</option>
+                            <option value="MA" data-ar="المغرب" data-en="Morocco">المغرب</option>
+                            <option value="MR" data-ar="موريتانيا" data-en="Mauritania">موريتانيا</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="typeFilter" class="filter-select">
+                            <option value="" data-ar="كل الأنواع" data-en="All Types">كل الأنواع</option>
+                            <option value="male" data-ar="ذكر" data-en="Male">ذكر</option>
+                            <option value="female" data-ar="أنثى" data-en="Female">أنثى</option>
+                        </select>
+                    </div>
+                    <button id="clearFiltersBtn" class="clear-btn">
+                        <i class="fas fa-times"></i>
+                        <span data-ar="مسح الفلاتر" data-en="Clear Filters">مسح الفلاتر</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <div class="results-header">
+                    <div class="results-count">
+                        <i class="fas fa-users"></i>
+                        <span id="resultsCount">0</span> <span data-ar="نتائج" data-en="results">نتائج</span>
+                    </div>
+                    <div class="results-actions">
+                        <button id="exportBtn" class="action-btn">
+                            <i class="fas fa-file-export"></i>
+                            <span data-ar="تصدير البيانات" data-en="Export Data">تصدير البيانات</span>
+                        </button>
+                        <button id="refreshBtn" class="action-btn">
+                            <i class="fas fa-sync-alt"></i>
+                            <span data-ar="تحديث" data-en="Refresh">تحديث</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="hostsList" class="hosts-grid"></div>
+                <div id="pagination" class="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Host Modal -->
+    <div id="addHostModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-ar="إضافة مضيف جديد" data-en="Add New Host">إضافة مضيف جديد</h2>
+                <button class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="hostForm" class="host-form">
+                <div class="form-group">
+                    <label for="hostId">
+                        <i class="fab fa-whatsapp"></i>
+                        <span data-ar="رقم الواتساب" data-en="WhatsApp Number">رقم الواتساب</span>
+                    </label>
+                    <input type="tel" id="hostId" required pattern="[0-9]{10,15}" data-ar-placeholder="أدخل رقم الواتساب" data-en-placeholder="Enter WhatsApp number" placeholder="أدخل رقم الواتساب">
+                </div>
+                <div class="form-group">
+                    <label for="hostName">
+                        <i class="fas fa-user"></i>
+                        <span data-ar="اسم المضيف" data-en="Host Name">اسم المضيف</span>
+                    </label>
+                    <input type="text" id="hostName" required data-ar-placeholder="أدخل اسم المضيف" data-en-placeholder="Enter host name" placeholder="أدخل اسم المضيف">
+                </div>
+                <div class="form-group">
+                    <label for="hostType">
+                        <i class="fas fa-venus-mars"></i>
+                        <span data-ar="نوع المضيف" data-en="Host Type">نوع المضيف</span>
+                    </label>
+                    <select id="hostType" required class="custom-select">
+                        <option value="" data-ar="اختر النوع" data-en="Select Type">اختر النوع</option>
+                        <option value="male" data-ar="ذكر" data-en="Male">ذكر</option>
+                        <option value="female" data-ar="أنثى" data-en="Female">أنثى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hostCountry">
+                        <i class="fas fa-globe-asia"></i>
+                        <span data-ar="الدولة" data-en="Country">الدولة</span>
+                    </label>
+                    <select id="hostCountry" required class="custom-select country-select">
+                        <option value="" data-ar="اختر الدولة" data-en="Select Country">اختر الدولة</option>
+                        <option value="SA" data-ar="السعودية" data-en="Saudi Arabia">السعودية</option>
+                        <option value="AE" data-ar="الإمارات" data-en="UAE">الإمارات</option>
+                        <option value="QA" data-ar="قطر" data-en="Qatar">قطر</option>
+                        <option value="KW" data-ar="الكويت" data-en="Kuwait">الكويت</option>
+                        <option value="BH" data-ar="البحرين" data-en="Bahrain">البحرين</option>
+                        <option value="OM" data-ar="عمان" data-en="Oman">عمان</option>
+                        <option value="EG" data-ar="مصر" data-en="Egypt">مصر</option>
+                        <option value="IQ" data-ar="العراق" data-en="Iraq">العراق</option>
+                        <option value="SY" data-ar="سوريا" data-en="Syria">سوريا</option>
+                        <option value="LB" data-ar="لبنان" data-en="Lebanon">لبنان</option>
+                        <option value="JO" data-ar="الأردن" data-en="Jordan">الأردن</option>
+                        <option value="PS" data-ar="فلسطين" data-en="Palestine">فلسطين</option>
+                        <option value="YE" data-ar="اليمن" data-en="Yemen">اليمن</option>
+                        <option value="SD" data-ar="السودان" data-en="Sudan">السودان</option>
+                        <option value="LY" data-ar="ليبيا" data-en="Libya">ليبيا</option>
+                        <option value="TN" data-ar="تونس" data-en="Tunisia">تونس</option>
+                        <option value="DZ" data-ar="الجزائر" data-en="Algeria">الجزائر</option>
+                        <option value="MA" data-ar="المغرب" data-en="Morocco">المغرب</option>
+                        <option value="MR" data-ar="موريتانيا" data-en="Mauritania">موريتانيا</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="joinDate">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span data-ar="تاريخ الانضمام" data-en="Join Date">تاريخ الانضمام</span>
+                    </label>
+                    <input type="date" id="joinDate" class="custom-select">
+                </div>
+                <div class="form-group">
+                    <label for="notes">
+                        <i class="fas fa-sticky-note"></i>
+                        <span data-ar="ملاحظات" data-en="Notes">ملاحظات</span>
+                    </label>
+                    <textarea id="notes" rows="3" data-ar-placeholder="أدخل أي ملاحظات إضافية" data-en-placeholder="Enter any additional notes" placeholder="أدخل أي ملاحظات إضافية"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-save"></i>
+                        <span data-ar="حفظ" data-en="Save">حفظ</span>
+                    </button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                        <span data-ar="إلغاء" data-en="Cancel">إلغاء</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/store.js"></script>
+</body>
+</html> 

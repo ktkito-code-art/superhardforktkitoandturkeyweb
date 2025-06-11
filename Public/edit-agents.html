@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الوكلاء</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/edit-agents.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Code Art</span>
+            </div>
+            <div class="nav-content">
+                <!-- Back Button -->
+                <a href="webowner.html" class="back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    عودة
+                </a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span id="userEmail"></span>
+                </div>
+                <div class="lang-switch" id="langSwitch" onclick="toggleLanguage()">
+                    <i class="fas fa-globe"></i>
+                    <span class="current-lang" dir="auto">AR</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Messages -->
+        <div id="error-message" class="message error" style="display: none;"></div>
+        <div id="success-message" class="message success" style="display: none;"></div>
+
+        <!-- Agents List -->
+        <div id="agents-list" class="agents-list"></div>
+
+        <!-- Delete Modal -->
+        <div id="delete-modal" class="modal">
+            <div class="modal-content">
+                <h2><i class="fas fa-trash-alt"></i> حذف وكيل</h2>
+                <p>هل أنت متأكد من حذف هذا الوكيل؟</p>
+                <form id="delete-form">
+                    <input type="hidden" id="delete-agency-name">
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn-danger">
+                            <i class="fas fa-trash"></i>
+                            حذف
+                        </button>
+                        <button type="button" onclick="hideModal('delete-modal')">
+                            <i class="fas fa-times"></i>
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Month Modal -->
+        <div id="add-month-modal" class="modal">
+            <div class="modal-content">
+                <h2><i class="fas fa-calendar-plus"></i> إضافة شهر جديد</h2>
+                <form id="add-month-form">
+                    <input type="hidden" id="add-month-agency-name" name="agencyName">
+                    <div class="form-group">
+                        <label for="year"><i class="fas fa-calendar"></i> السنة:</label>
+                        <select id="year" name="year" required>
+                            <option value="">اختر السنة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="month"><i class="fas fa-calendar-alt"></i> الشهر:</label>
+                        <select id="month" name="month" required>
+                            <option value="">اختر الشهر</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="file1"><i class="fas fa-file-excel"></i> ملف الرواتب:</label>
+                        <input type="file" id="file1" name="file1" accept=".xlsx" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="file2"><i class="fas fa-file-excel"></i> ملف المستهدف:</label>
+                        <input type="file" id="file2" name="file2" accept=".xlsx" required>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            إضافة
+                        </button>
+                        <button type="button" onclick="hideModal('add-month-modal')">
+                            <i class="fas fa-times"></i>
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Year Modal -->
+        <div id="add-year-modal" class="modal">
+            <div class="modal-content">
+                <h2><i class="fas fa-calendar-plus"></i> إضافة سنة جديدة</h2>
+                <form id="add-year-form">
+                    <input type="hidden" id="add-year-agency-name" name="agencyName">
+                    <div class="form-group">
+                        <label for="new-year"><i class="fas fa-calendar"></i> السنة:</label>
+                        <input type="number" id="new-year" name="year" required min="2000" max="2100">
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            إضافة
+                        </button>
+                        <button type="button" onclick="hideModal('add-year-modal')">
+                            <i class="fas fa-times"></i>
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Change Password Modal -->
+        <div id="change-password-modal" class="modal">
+            <div class="modal-content">
+                <h2><i class="fas fa-key"></i> تغيير كلمة المرور</h2>
+                <form id="change-password-form">
+                    <input type="hidden" id="change-password-agency-name" name="agencyName">
+                    <div class="form-group">
+                        <label for="new-email"><i class="fas fa-envelope"></i> البريد الإلكتروني الجديد:</label>
+                        <input type="email" id="new-email" name="newEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password"><i class="fas fa-lock"></i> كلمة المرور الجديدة:</label>
+                        <input type="password" id="new-password" name="newPassword" required>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="edit-btn">
+                            <i class="fas fa-save"></i>
+                            تغيير
+                        </button>
+                        <button type="button" onclick="hideModal('change-password-modal')">
+                            <i class="fas fa-times"></i>
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/edit-agents.js"></script>
+</body>
+</html> 

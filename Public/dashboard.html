@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Art - لوحة التحكم</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Language data
+        const translations = {
+            ar: {
+                title: "Code Art - لوحة التحكم",
+                welcome: "مرحباً بك في نظام إدارة البيانات",
+                dashboard: "لوحة التحكم",
+                queryData: "استعلام عن بيانات",
+                queryDesc: "ابحث واستعلم عن البيانات المخزنة في النظام",
+                storeData: "تخزين البيانات",
+                storeDesc: "قم بتخزين وإدارة البيانات الخاصة بك",
+                analyzeData: "تحليل البيانات",
+                analyzeDesc: "تحليل وعرض البيانات بشكل مرئي",
+                manageAdmins: "إدارة المشرفين",
+                adminDesc: "إضافة وإدارة المشرفين (الحد الأقصى 3)",
+                manageBranches: "إدارة الفروع",
+                branchDesc: "إضافة وإدارة وتعديل وحذف الوكالات الفرعية",
+                addAdmin: "إضافة مشرف",
+                addBranch: "إضافة فرع",
+                emailPlaceholder: "البريد الإلكتروني",
+                passwordPlaceholder: "كلمة المرور",
+                branchNamePlaceholder: "اسم الفرع",
+                branchHint: "أدخل اسم الفرع فقط (مثال: Turky )",
+                currentBranches: "الفروع الحالية",
+                noBranches: "لا توجد فروع مسجلة",
+                confirmDelete: "تأكيد الحذف",
+                confirmBranchDelete: "تأكيد حذف الفرع",
+                confirmDeleteMessage: "هل أنت متأكد من حذف هذا المشرف؟",
+                confirmBranchDeleteMessage: "هل أنت متأكد من حذف هذا الفرع؟",
+                deleteWarning: "سيتم حذف جميع البيانات المرتبطة بهذا الفرع بشكل نهائي",
+                cancel: "إلغاء",
+                confirm: "تأكيد",
+                confirmDelete: "تأكيد الحذف",
+                addNewAdmin: "إضافة مشرف جديد",
+                addNewBranch: "إضافة فرع جديد",
+                remainingBranches: "يمكنك إضافة {count} فروع أخرى",
+                maxBranchesReached: "تم الوصول للحد الأقصى من الفروع"
+            },
+            en: {
+                title: "Code Art - Dashboard",
+                welcome: "Welcome to the Data Management System",
+                dashboard: "Dashboard",
+                queryData: "Query Data",
+                queryDesc: "Search and query data stored in the system",
+                storeData: "Store Data",
+                storeDesc: "Store and manage your data",
+                analyzeData: "Analyze Data",
+                analyzeDesc: "Analyze and visualize data",
+                manageAdmins: "Manage Admins",
+                adminDesc: "Add and manage administrators (Maximum 3)",
+                manageBranches: "Manage Branches",
+                branchDesc: "Add, manage, modify and delete sub-agencies",
+                addAdmin: "Add Admin",
+                addBranch: "Add Branch",
+                emailPlaceholder: "Email",
+                passwordPlaceholder: "Password",
+                branchNamePlaceholder: "Branch Name",
+                branchHint: "Enter branch name only (e.g., Turky)",
+                currentBranches: "Current Branches",
+                noBranches: "No branches registered",
+                confirmDelete: "Confirm Delete",
+                confirmBranchDelete: "Confirm Branch Delete",
+                confirmDeleteMessage: "Are you sure you want to delete this admin?",
+                confirmBranchDeleteMessage: "Are you sure you want to delete this branch?",
+                deleteWarning: "All data associated with this branch will be permanently deleted",
+                cancel: "Cancel",
+                confirm: "Confirm",
+                confirmDelete: "Confirm Delete",
+                addNewAdmin: "Add New Admin",
+                addNewBranch: "Add New Branch",
+                remainingBranches: "You can add {count} more branches",
+                maxBranchesReached: "Maximum number of branches reached"
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Code Art</span>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-content">
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span id="userEmail"></span>
+                </div>
+                <div class="lang-switch" id="langSwitch" onclick="toggleLanguage()">
+                    <i class="fas fa-globe"></i>
+                    <span class="current-lang" dir="auto">AR</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>لوحة التحكم</h1>
+                <p>مرحباً بك في نظام إدارة البيانات</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card" onclick="location.href='query.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>استعلام عن بيانات</h3>
+                    <p>ابحث واستعلم عن البيانات المخزنة في النظام</p>
+                </div>
+
+                <div class="dashboard-card" onclick="location.href='store.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>تخزين البيانات</h3>
+                    <p>قم بتخزين وإدارة البيانات الخاصة بك</p>
+                </div>
+
+                <div class="dashboard-card" onclick="location.href='analyze.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>تحليل البيانات</h3>
+                    <p>تحليل وعرض البيانات بشكل مرئي</p>
+                </div>
+
+                <div class="dashboard-card" onclick="openAdminModal()">
+                    <div class="card-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>إدارة المشرفين</h3>
+                    <p>إضافة وإدارة المشرفين (الحد الأقصى 3)</p>
+                </div>
+
+                <div class="dashboard-card" onclick="openManageBranchModal()">
+                    <div class="card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>إدارة الفروع</h3>
+                    <p>إضافة وإدارة وتعديل وحذف الوكالات الفرعية</p>
+                </div>
+
+                <div class="dashboard-card" onclick="location.href='branch-agency.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h3>إدارة الوكالات الفرعية</h3>
+                    <p>إدارة وتعديل وحذف معرفات الأشخاص في الوكالات الفرعية</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Management Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إدارة المشرفين</h2>
+                <button class="close-btn" onclick="closeAdminModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="adminsList" class="admins-list">
+                    <!-- سيتم ملء هذا القسم ديناميكياً -->
+                </div>
+                <div id="addAdminForm" class="add-admin-form">
+                    <h3>إضافة مشرف جديد</h3>
+                    <div class="form-group">
+                        <input type="email" id="adminEmail" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="adminPassword" placeholder="كلمة المرور" required>
+                    </div>
+                    <button id="addAdminBtn" onclick="addAdmin()">
+                        <i class="fas fa-plus"></i>
+                        إضافة مشرف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Branch Modal -->
+    <div id="manageBranchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إدارة الفروع</h2>
+                <div class="branch-stats" id="branchStats"></div>
+                <button class="close-btn" onclick="closeManageBranchModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add Branch Form Section -->
+                <div id="addBranchForm" class="add-branch-section">
+                    <h3>إضافة فرع جديد</h3>
+                    <div class="form-group">
+                        <input type="text" id="branchName" placeholder="اسم الفرع" required>
+                        <small class="form-hint">أدخل اسم الفرع فقط (مثال: Turky )</small>
+                        <small class="form-hint branch-limit" id="branchLimitInfo"></small>
+                    </div>
+                    <button id="addBranchBtn" onclick="addBranch()">
+                        <i class="fas fa-plus"></i>
+                        إضافة فرع
+                    </button>
+                </div>
+
+                <!-- Branches List Section -->
+                <div class="branches-list-section">
+                    <h3>الفروع الحالية</h3>
+                    <div id="branchesList" class="admins-list">
+                        <!-- سيتم ملء هذا القسم ديناميكياً -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h2>تأكيد الحذف</h2>
+                <button class="close-btn" onclick="closeConfirmModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p>هل أنت متأكد من حذف هذا المشرف؟</p>
+                <div class="confirm-buttons">
+                    <button class="cancel-btn" onclick="closeConfirmModal()">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </button>
+                    <button class="confirm-btn" onclick="confirmRemoveAdmin()">
+                        <i class="fas fa-check"></i>
+                        تأكيد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Branch Confirmation Modal -->
+    <div id="branchConfirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h2>تأكيد حذف الفرع</h2>
+                <button class="close-btn" onclick="closeBranchConfirmModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-icon branch-confirm">
+                    <i class="fas fa-building"></i>
+                </div>
+                <p id="branchConfirmMessage">هل أنت متأكد من حذف هذا الفرع؟</p>
+                <div class="confirm-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>سيتم حذف جميع البيانات المرتبطة بهذا الفرع بشكل نهائي</span>
+                </div>
+                <div class="confirm-buttons">
+                    <button class="cancel-btn" onclick="closeBranchConfirmModal()">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </button>
+                    <button class="confirm-btn delete-btn" onclick="confirmRemoveBranch()">
+                        <i class="fas fa-trash"></i>
+                        تأكيد الحذف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Add language switching functionality
+        let currentLang = localStorage.getItem('language') || 'ar';
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('language', currentLang);
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            // Update HTML direction
+            document.documentElement.lang = currentLang;
+            
+            // Update title
+            document.title = translations[currentLang].title;
+            
+            // Update language indicator
+            const langElement = document.querySelector('.current-lang');
+            langElement.textContent = currentLang.toUpperCase();
+            langElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update dashboard content
+            document.querySelector('.dashboard-header h1').textContent = translations[currentLang].dashboard;
+            document.querySelector('.dashboard-header p').textContent = translations[currentLang].welcome;
+            
+            // Update cards
+            const cards = document.querySelectorAll('.dashboard-card');
+            cards[0].querySelector('h3').textContent = translations[currentLang].queryData;
+            cards[0].querySelector('p').textContent = translations[currentLang].queryDesc;
+            cards[1].querySelector('h3').textContent = translations[currentLang].storeData;
+            cards[1].querySelector('p').textContent = translations[currentLang].storeDesc;
+            cards[2].querySelector('h3').textContent = translations[currentLang].analyzeData;
+            cards[2].querySelector('p').textContent = translations[currentLang].analyzeDesc;
+            cards[3].querySelector('h3').textContent = translations[currentLang].manageAdmins;
+            cards[3].querySelector('p').textContent = translations[currentLang].adminDesc;
+            cards[4].querySelector('h3').textContent = translations[currentLang].manageBranches;
+            cards[4].querySelector('p').textContent = translations[currentLang].branchDesc;
+            cards[5].querySelector('h3').textContent = translations[currentLang].manageBranches;
+            cards[5].querySelector('p').textContent = translations[currentLang].branchDesc;
+
+            // Update modals
+            document.querySelector('#adminModal .modal-header h2').textContent = translations[currentLang].manageAdmins;
+            document.querySelector('#addAdminForm h3').textContent = translations[currentLang].addNewAdmin;
+            document.querySelector('#adminEmail').placeholder = translations[currentLang].emailPlaceholder;
+            document.querySelector('#adminPassword').placeholder = translations[currentLang].passwordPlaceholder;
+            document.querySelector('#addAdminBtn').innerHTML = `<i class="fas fa-plus"></i> ${translations[currentLang].addAdmin}`;
+
+            document.querySelector('#manageBranchModal .modal-header h2').textContent = translations[currentLang].manageBranches;
+            document.querySelector('#addBranchForm h3').textContent = translations[currentLang].addNewBranch;
+            document.querySelector('#branchName').placeholder = translations[currentLang].branchNamePlaceholder;
+            document.querySelector('.form-hint').textContent = translations[currentLang].branchHint;
+            document.querySelector('#addBranchBtn').innerHTML = `<i class="fas fa-plus"></i> ${translations[currentLang].addBranch}`;
+            document.querySelector('.branches-list-section h3').textContent = translations[currentLang].currentBranches;
+
+            // Update confirmation modals
+            document.querySelector('#confirmModal .modal-header h2').textContent = translations[currentLang].confirmDelete;
+            document.querySelector('#confirmModal .modal-body p').textContent = translations[currentLang].confirmDeleteMessage;
+            document.querySelector('#confirmModal .cancel-btn').innerHTML = `<i class="fas fa-times"></i> ${translations[currentLang].cancel}`;
+            document.querySelector('#confirmModal .confirm-btn').innerHTML = `<i class="fas fa-check"></i> ${translations[currentLang].confirm}`;
+
+            document.querySelector('#branchConfirmModal .modal-header h2').textContent = translations[currentLang].confirmBranchDelete;
+            document.querySelector('#branchConfirmModal .cancel-btn').innerHTML = `<i class="fas fa-times"></i> ${translations[currentLang].cancel}`;
+            document.querySelector('#branchConfirmModal .delete-btn').innerHTML = `<i class="fas fa-trash"></i> ${translations[currentLang].confirmDelete}`;
+            document.querySelector('#branchConfirmModal .confirm-warning span').textContent = translations[currentLang].deleteWarning;
+        }
+
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateLanguage();
+            
+            try {
+                // Check server-side authentication first
+                const response = await fetch('/api/check-auth', {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (!data.success || data.userType !== 'owner') {
+                    // Clear any stale session storage
+                    sessionStorage.clear();
+                    
+                    // Redirect based on user type
+                    if (data.userType === 'admin1' || data.userType === 'admin2' || data.userType === 'admin3') {
+                        window.location.href = '/query.html';
+                    } else if (data.userType === 'webowner') {
+                        window.location.href = '/webowner.html';
+                    } else {
+                        window.location.href = '/index.html';
+                    }
+                    return;
+                }
+
+                // Update UI with user info
+                const userEmailElement = document.getElementById('userEmail');
+                if (userEmailElement) {
+                    userEmailElement.textContent = data.userEmail;
+                }
+
+                // Store minimal info in sessionStorage for UI purposes
+                sessionStorage.setItem('userEmail', data.userEmail);
+                sessionStorage.setItem('userType', data.userType);
+                if (data.agencyId) {
+                    sessionStorage.setItem('AGENCY_ID', data.agencyId);
+                }
+
+                // Initialize dashboard features
+                loadAdmins();
+            } catch (error) {
+                console.error('Authentication error:', error);
+                sessionStorage.clear();
+                window.location.href = '/index.html';
+            }
+        });
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = '/index.html';
+        }
+
+        // Admin Management Functions
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'block';
+            loadAdmins();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            
+            // Add a class for longer messages
+            if (message.length > 50) {
+                toast.classList.add('long-message');
+            }
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.remove('long-message');
+            }, 5000); // Increased duration for longer messages
+        }
+
+        let adminToDelete = null;
+
+        function showConfirmModal(email) {
+            adminToDelete = email;
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            adminToDelete = null;
+        }
+
+        async function confirmRemoveAdmin() {
+            if (!adminToDelete) return;
+            
+            const agencyId = sessionStorage.getItem('AGENCY_ID');
+            try {
+                const response = await fetch('/api/remove-admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ agencyId, adminEmail: adminToDelete })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('تم حذف المشرف بنجاح');
+                    loadAdmins();
+                } else {
+                    showToast(data.message || 'حدث خطأ في حذف المشرف', 'error');
+                }
+            } catch (error) {
+                console.error('Error removing admin:', error);
+                showToast('حدث خطأ في حذف المشرف', 'error');
+            }
+            closeConfirmModal();
+        }
+
+        function removeAdmin(email) {
+            showConfirmModal(email);
+        }
+
+        async function loadAdmins() {
+            try {
+                const agencyId = sessionStorage.getItem('AGENCY_ID');
+                const response = await fetch(`/api/admins/${agencyId}`);
+                const data = await response.json();
+                
+                const adminsList = document.getElementById('adminsList');
+                adminsList.innerHTML = '';
+
+                if (data.admins && data.admins.length > 0) {
+                    data.admins.forEach(admin => {
+                        const adminElement = document.createElement('div');
+                        adminElement.className = 'admin-item';
+                        adminElement.innerHTML = `
+                            <div class="admin-info">
+                                <i class="fas fa-user-shield"></i>
+                                <span>${admin.email}</span>
+                                <span class="admin-position">${admin.position}</span>
+                            </div>
+                            <button onclick="removeAdmin('${admin.email}')" class="remove-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        adminsList.appendChild(adminElement);
+                    });
+                }
+
+                // إظهار/إخفاء زر الإضافة بناءً على عدد المشرفين
+                const addAdminBtn = document.getElementById('addAdminBtn');
+                addAdminBtn.style.display = data.admins.length >= 3 ? 'none' : 'block';
+            } catch (error) {
+                console.error('Error loading admins:', error);
+                showToast('حدث خطأ في تحميل بيانات المشرفين', 'error');
+            }
+        }
+
+        async function addAdmin() {
+            const emailInput = document.getElementById('adminEmail');
+            const passwordInput = document.getElementById('adminPassword');
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // التحقق من صحة البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح', 'error');
+                emailInput.focus();
+                return;
+            }
+
+            // التحقق من كلمة المرور
+            if (!password || password.length < 4) {
+                showToast('كلمة المرور يجب أن تكون 4 أحرف على الأقل', 'error');
+                passwordInput.focus();
+                return;
+            }
+
+            const agencyId = sessionStorage.getItem('AGENCY_ID');
+
+            try {
+                const response = await fetch('/api/add-admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ agencyId, adminEmail: email, adminPassword: password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast(`تم إضافة المشرف بنجاح (${data.position})`);
+                    emailInput.value = '';
+                    passwordInput.value = '';
+                    loadAdmins();
+                } else {
+                    showToast(data.message || 'حدث خطأ في إضافة المشرف', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding admin:', error);
+                showToast('حدث خطأ في إضافة المشرف', 'error');
+            }
+        }
+
+        // تحديث شكل الإدخال عند الكتابة
+        document.getElementById('adminEmail').addEventListener('input', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailRegex.test(this.value.trim())) {
+                this.style.borderColor = 'rgba(46, 204, 113, 0.5)';
+            } else {
+                this.style.borderColor = this.value ? 'rgba(231, 76, 60, 0.5)' : '';
+            }
+        });
+
+        // Branch Management Functions
+        function openManageBranchModal() {
+            document.getElementById('manageBranchModal').style.display = 'block';
+            loadBranches();
+        }
+
+        function closeManageBranchModal() {
+            document.getElementById('manageBranchModal').style.display = 'none';
+            // Clear form
+            document.getElementById('branchName').value = '';
+        }
+
+        async function loadBranches() {
+            try {
+                const agencyId = sessionStorage.getItem('AGENCY_ID');
+                const response = await fetch(`/api/branches/${agencyId}`);
+                const data = await response.json();
+                
+                const branchesList = document.getElementById('branchesList');
+                const branchStats = document.getElementById('branchStats');
+                const branchLimitInfo = document.getElementById('branchLimitInfo');
+                
+                // Update branch stats
+                if (branchStats) {
+                    branchStats.innerHTML = `
+                        <span class="branch-count">
+                            <i class="fas fa-building"></i>
+                            ${data.branches.length} / ${data.maxBranches}
+                        </span>
+                    `;
+                }
+
+                // Update branch limit info in add form
+                if (branchLimitInfo) {
+                    branchLimitInfo.innerHTML = `
+                        <i class="fas fa-info-circle"></i>
+                        يمكنك إضافة ${data.remainingBranches} فروع أخرى
+                    `;
+                    branchLimitInfo.className = `form-hint branch-limit ${data.remainingBranches === 0 ? 'limit-reached' : ''}`;
+                }
+
+                // Update add branch button state
+                const addBranchBtn = document.getElementById('addBranchBtn');
+                if (addBranchBtn) {
+                    if (data.remainingBranches === 0) {
+                        addBranchBtn.disabled = true;
+                        addBranchBtn.title = 'تم الوصول للحد الأقصى من الفروع';
+                    } else {
+                        addBranchBtn.disabled = false;
+                        addBranchBtn.title = '';
+                    }
+                }
+
+                branchesList.innerHTML = '';
+
+                if (data.branches && data.branches.length > 0) {
+                    data.branches.forEach(branch => {
+                        const branchElement = document.createElement('div');
+                        branchElement.className = 'admin-item';
+                        branchElement.innerHTML = `
+                            <div class="admin-info">
+                                <i class="fas fa-building"></i>
+                                <span>${branch}</span>
+                            </div>
+                            <div class="branch-actions">
+                                <button onclick="removeBranch('${branch}')" class="remove-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        branchesList.appendChild(branchElement);
+                    });
+                } else {
+                    branchesList.innerHTML = `
+                        <div class="no-branches">
+                            <i class="fas fa-building"></i>
+                            <p>لا توجد فروع مسجلة</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading branches:', error);
+                showToast('حدث خطأ في تحميل بيانات الفروع', 'error');
+            }
+        }
+
+        async function addBranch() {
+            const nameInput = document.getElementById('branchName');
+            const name = nameInput.value.trim();
+            const addBranchBtn = document.getElementById('addBranchBtn');
+
+            // Disable button while processing
+            addBranchBtn.disabled = true;
+            addBranchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإضافة...';
+
+            try {
+                if (!name) {
+                    showToast('يرجى إدخال اسم الفرع', 'error');
+                    return;
+                }
+
+                if (name.length < 3 || name.length > 50) {
+                    showToast('اسم الفرع يجب أن يكون بين 3 و 50 حرفاً', 'error');
+                    return;
+                }
+
+                const agencyId = sessionStorage.getItem('AGENCY_ID');
+                if (!agencyId) {
+                    showToast('لم يتم العثور على معرف الوكالة', 'error');
+                    return;
+                }
+
+                const response = await fetch('/api/add-branch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        agencyId, 
+                        branchName: name
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('تم إضافة الفرع بنجاح');
+                    closeManageBranchModal();
+                    // Refresh branches list if manage modal is open
+                    if (document.getElementById('manageBranchModal').style.display === 'block') {
+                        loadBranches();
+                    }
+                } else {
+                    // Handle specific error cases
+                    let errorMessage = data.message;
+                    if (data.details) {
+                        if (data.details.agencyId === 'مطلوب' || data.details.branchName === 'مطلوب') {
+                            errorMessage = 'يرجى إدخال جميع البيانات المطلوبة';
+                        } else if (data.details.length) {
+                            errorMessage = `اسم الفرع يجب أن يكون بين ${data.details.min} و ${data.details.max} حرفاً`;
+                        } else if (data.details.currentBranches) {
+                            errorMessage = `تم الوصول للحد الأقصى من الفروع (${data.details.maxBranches})`;
+                        } else if (data.details.existingBranches) {
+                            errorMessage = 'اسم الفرع موجود مسبقاً';
+                        }
+                    }
+                    showToast(errorMessage, 'error');
+                    console.error('Error details:', data);
+                }
+            } catch (error) {
+                console.error('Error adding branch:', error);
+                showToast('حدث خطأ في الاتصال بالخادم', 'error');
+            } finally {
+                // Re-enable button and restore original text
+                addBranchBtn.disabled = false;
+                addBranchBtn.innerHTML = '<i class="fas fa-plus"></i> إضافة فرع';
+            }
+        }
+
+        let branchToDelete = null;
+
+        function showBranchConfirmModal(branchName) {
+            branchToDelete = branchName;
+            const message = document.getElementById('branchConfirmMessage');
+            message.textContent = `هل أنت متأكد من حذف الفرع "${branchName}"؟`;
+            document.getElementById('branchConfirmModal').style.display = 'block';
+        }
+
+        function closeBranchConfirmModal() {
+            document.getElementById('branchConfirmModal').style.display = 'none';
+            branchToDelete = null;
+        }
+
+        async function confirmRemoveBranch() {
+            if (!branchToDelete) return;
+            
+            try {
+                const response = await fetch('/api/remove-branch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        agencyId: sessionStorage.getItem('AGENCY_ID'),
+                        branchName: branchToDelete 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('تم حذف الفرع بنجاح');
+                    loadBranches();
+                } else {
+                    showToast(data.message || 'حدث خطأ في حذف الفرع', 'error');
+                }
+            } catch (error) {
+                console.error('Error removing branch:', error);
+                showToast('حدث خطأ في حذف الفرع', 'error');
+            }
+            closeBranchConfirmModal();
+        }
+
+        async function removeBranch(branchName) {
+            showBranchConfirmModal(branchName);
+        }
+
+        // Add mobile menu functionality
+        function toggleMobileMenu() {
+            const navContent = document.querySelector('.nav-content');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            navContent.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navContent = document.querySelector('.nav-content');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navContent.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                navContent.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html> 

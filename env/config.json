@@ -1,0 +1,52 @@
+{
+  "LOGIN": {
+    "webowner": {
+      "email": "matt1@gmail.com",
+      "password": "123456"
+    },
+    "AGENCIES": {
+      "AH": {
+        "owner": {
+          "email": "tarkugaming@gmail.com",
+          "password": "1"
+        },
+        "branches": [
+          "TURKY"
+        ]
+      },
+      "n3eem": {
+        "owner": {
+          "email": "n3eem@gmail.com",
+          "password": "123456"
+        },
+        "branches": [
+          "LOL"
+        ]
+      },
+      "dark": {
+        "owner": {
+          "email": "dark@gmail.com",
+          "password": "dark123"
+        }
+      },
+      "darkd": {
+        "owner": {
+          "email": "tarkugamindg@gmail.com",
+          "password": "123456789"
+        }
+      },
+      "LONG": {
+        "owner": {
+          "email": "long@gmail.com",
+          "password": "556699"
+        }
+      },
+      "lole": {
+        "owner": {
+          "email": "lole@gmail.com",
+          "password": "123456"
+        }
+      }
+    }
+  }
+}

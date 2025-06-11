@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-ar="البحث عن بيانات الموظفين" data-en="Employee Data Search">البحث عن بيانات الموظفين</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/query.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Code Art</span>
+            </div>
+            <div class="nav-content">
+                <!-- Back Button -->
+                <a href="dashboard.html" class="back-btn">
+                    <i class="fas fa-arrow-right"></i>
+                    عودة
+                </a>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span id="userEmail"></span>
+                </div>
+                <div class="lang-switch" id="langSwitch" onclick="toggleLanguage()">
+                    <i class="fas fa-globe"></i>
+                    <span class="current-lang" dir="auto">AR</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="query-container">
+            <div class="query-header">
+                <h1 data-ar="البحث عن بيانات الموظفين" data-en="Employee Data Search">البحث عن بيانات الموظفين</h1>
+                <p data-ar="أدخل رقم الموظف للبحث عن بياناته" data-en="Enter employee ID to search for their data">أدخل رقم الموظف للبحث عن بياناته</p>
+            </div>
+
+            <div class="search-box">
+                <div class="date-selectors">
+                    <div class="safemode-toggle">
+                        <button id="safemodeToggle" class="safemode-btn">
+                            <i class="fas fa-shield-alt"></i>
+                            <span data-ar="وضع الأمان" data-en="Safe Mode">وضع الأمان</span>
+                        </button>
+                    </div>
+                    <select id="yearSelect" class="date-select">
+                        <option value="" data-ar="اختر السنة" data-en="Select Year">اختر السنة</option>
+                    </select>
+                    <select id="monthSelect" class="date-select" disabled>
+                        <option value="" data-ar="اختر الشهر" data-en="Select Month">اختر الشهر</option>
+                    </select>
+                </div>
+                <div class="search-input-group">
+                    <input type="text" id="searchInput" data-ar-placeholder="أدخل رقم الموظف" data-en-placeholder="Enter employee ID" placeholder="أدخل رقم الموظف" dir="ltr">
+                    <button id="searchButton">
+                        <i class="fas fa-search"></i>
+                        <span data-ar="بحث" data-en="Search">بحث</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultCard" class="result-card" style="display: none;">
+                <div class="result-header">
+                    <div class="employee-id">
+                        <i class="fas fa-id-card"></i>
+                        <span id="employeeId"></span>
+                    </div>
+                    <div id="fileType" class="file-type"></div>
+                </div>
+                <div class="result-content">
+                    <div class="result-item">
+                        <span class="label">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span data-ar="المضيف لمدة ساعتين:" data-en="Host for 2 hours:">المضيف لمدة ساعتين:</span>
+                        </span>
+                        <span id="targetDate" class="value"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">
+                            <i class="fas fa-gem"></i>
+                            <span data-ar="عدد الماسات المجمعة:" data-en="Collected Gems:">عدد الماسات المجمعة:</span>
+                        </span>
+                        <span id="gemsCount" class="value"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span data-ar="الراتب:" data-en="Salary:">الراتب:</span>
+                        </span>
+                        <span id="salary" class="value"></span>
+                    </div>
+                </div>
+                <button id="copyButton" class="copy-button">
+                    <i class="fas fa-copy"></i>
+                    <span data-ar="نسخ البيانات" data-en="Copy Data">نسخ البيانات</span>
+                </button>
+            </div>
+
+            <!-- Branch Agency Section -->
+            <div class="branch-agency-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fas fa-building"></i>
+                        <span data-ar="الوكالات الفرعية" data-en="Branch Agencies">الوكالات الفرعية</span>
+                    </h2>
+                    <div class="section-actions">
+                        <button id="toggleBranchSection" class="toggle-btn">
+                            <i class="fas fa-eye"></i>
+                            <span data-ar="إخفاء" data-en="Hide">إخفاء</span>
+                        </button>
+                        <button id="exportBranchData" class="export-btn" style="display: none;">
+                            <i class="fas fa-file-excel"></i>
+                            <span data-ar="تصدير إلى Excel" data-en="Export to Excel">تصدير إلى Excel</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="branchAgencyContent" class="branch-agency-content">
+                    <div class="form-group">
+                        <label for="branchSelect" data-ar="اختر الوكالة الفرعية" data-en="Select Branch Agency">اختر الوكالة الفرعية</label>
+                        <select id="branchSelect" class="branch-select">
+                            <option value="" data-ar="-- اختر وكالة فرعية --" data-en="-- Select Branch Agency --">-- اختر وكالة فرعية --</option>
+                        </select>
+                    </div>
+                    <div id="branchData" class="branch-data" style="display: none;">
+                        <div class="branch-header">
+                            <h3 id="branchName"></h3>
+                            <span id="branchDate" class="branch-date"></span>
+                        </div>
+                        <div class="branch-employees">
+                            <div class="employees-header">
+                                <span data-ar="معرفات الموظفين" data-en="Employee IDs">معرفات الموظفين</span>
+                                <button id="searchBranchBtn" class="search-branch-btn">
+                                    <i class="fas fa-search"></i>
+                                    <span data-ar="بحث عن البيانات" data-en="Search Data">بحث عن البيانات</span>
+                                </button>
+                            </div>
+                            <div id="branchEmployeesList" class="employees-list">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-history">
+                <div class="history-header">
+                    <h2>
+                        <i class="fas fa-history"></i>
+                        <span data-ar="سجل البحث" data-en="Search History">سجل البحث</span>
+                    </h2>
+                    <div class="history-buttons">
+                        <button id="toggleHistoryBtn" class="history-btn">
+                            <i class="fas fa-eye"></i>
+                            <span data-ar="إخفاء السجل" data-en="Hide History">إخفاء السجل</span>
+                        </button>
+                        <button id="clearHistoryBtn" class="history-btn">
+                            <i class="fas fa-trash"></i>
+                            <span data-ar="مسح السجل" data-en="Clear History">مسح السجل</span>
+                        </button>
+                    </div>
+                </div>
+                <ul id="historyList"></ul>
+            </div>
+        </div>
+
+        <!-- Calculator Button -->
+        <button id="calculatorButton" class="calculator-button">
+            <i class="fas fa-calculator"></i>
+        </button>
+
+        <!-- Calculator Modal -->
+        <div id="calculatorModal" class="calculator-modal">
+            <div class="calculator-content">
+                <div class="calculator-header">
+                    <h2 data-ar="حاسبة الرواتب" data-en="Salary Calculator">حاسبة الرواتب</h2>
+                    <button class="close-button" id="closeCalculator">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="calculator-body">
+                    <div class="calculator-type">
+                        <button class="type-btn active" data-type="salary" data-ar="الرواتب" data-en="Salaries">الرواتب</button>
+                        <button class="type-btn" data-type="gems" data-ar="الماسات" data-en="Gems">الماسات</button>
+                    </div>
+                    <div class="calculator-date-selectors">
+                        <select id="calcYearSelect" class="calc-date-select">
+                            <option value="" data-ar="اختر السنة" data-en="Select Year">اختر السنة</option>
+                        </select>
+                        <select id="calcMonthSelect" class="calc-date-select" disabled>
+                            <option value="" data-ar="اختر الشهر" data-en="Select Month">اختر الشهر</option>
+                        </select>
+                    </div>
+                    <div class="calculator-inputs">
+                        <div class="input-group">
+                            <input type="text" class="employee-input" data-ar-placeholder="أدخل رقم الموظف" data-en-placeholder="Enter employee ID" placeholder="أدخل رقم الموظف" dir="ltr">
+                            <button class="remove-input" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button id="addEmployeeBtn" class="add-employee-btn">
+                        <i class="fas fa-plus"></i>
+                        <span data-ar="إضافة موظف آخر" data-en="Add Another Employee">إضافة موظف آخر</span>
+                    </button>
+                    <div class="calculator-result">
+                        <h3 data-ar="النتيجة" data-en="Result">النتيجة</h3>
+                        <div class="result-container">
+                            <div id="resultValue" class="result-value">0.00</div>
+                            <button id="copyResultBtn" class="copy-result-btn" title="نسخ النتيجة">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calculator-examples">
+                        <h4 data-ar="أمثلة" data-en="Examples">أمثلة</h4>
+                        <p>101703843 + 102379614</p>
+                        <p>101703843 + 102379614 + 102379615</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toast" class="toast"></div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirmationModal" class="confirmation-modal">
+            <div class="confirmation-content">
+                <div class="confirmation-header">
+                    <h3 data-ar="تأكيد المسح" data-en="Confirm Deletion">تأكيد المسح</h3>
+                    <button class="close-confirmation">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="confirmation-body">
+                    <p data-ar="هل أنت متأكد من مسح سجل البحث؟" data-en="Are you sure you want to clear the search history?">هل أنت متأكد من مسح سجل البحث؟</p>
+                </div>
+                <div class="confirmation-actions">
+                    <button class="confirm-btn" data-ar="تأكيد" data-en="Confirm">تأكيد</button>
+                    <button class="cancel-btn" data-ar="إلغاء" data-en="Cancel">إلغاء</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="js/query.js"></script>
+</body>
+</html> 
