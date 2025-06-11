@@ -11,7 +11,9 @@ const branchRoutes = require('./server/routes/branch');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Add at the very top of the file, after imports
+app.get("/", (req, res) => {
+  res.send("Server is running on Railway!");
+});
 console.log('=== Server Starting ===');
 console.log('Current working directory:', process.cwd());
 console.log('Environment:', process.env.NODE_ENV || 'development');
